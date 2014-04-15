@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
+using System.Web.UI.WebControls;
 
 namespace SharpBoost {
     public static class MonadicNullCheckChains {
@@ -21,6 +23,11 @@ namespace SharpBoost {
             return o;
         }
 
+        public static TInput ValOrError<TInput>(this TInput o, Exception error)
+            where TInput : class {
+            return ValOrError(o, () => error);
+        }
+
         public static TResult Return<TInput, TResult>(this TInput o, Func<TInput, TResult> evaluator, TResult defaultValue)
             where TInput : class {
             return o == null ? defaultValue : evaluator(o);
@@ -33,6 +40,12 @@ namespace SharpBoost {
             if (o == null)
                 throw error();
             return evaluator(o);
+        }
+
+        public static TResult ReturnOrError<TInput, TResult>(this TInput o,
+            Func<TInput, TResult> evaluator, Exception error)
+            where TInput : class {
+            return ReturnOrError(o, evaluator, () => error);
         }
 
         public static TInput If<TInput>(this TInput o, Func<TInput, bool> evaluator)
