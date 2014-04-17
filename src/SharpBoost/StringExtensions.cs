@@ -228,22 +228,13 @@ namespace SharpBoost {
 
         public static T XmlDeserialize<T>(this string xml) where T : class {
             var serialiser = new XmlSerializer(typeof(T));
-            T newObject;
 
             using (var stringReader = new StringReader(xml)) {
                 using (var xmlReader = new XmlTextReader(stringReader)) {
-                    try {
-                        newObject = serialiser.Deserialize(xmlReader) as T;
-                    }
-                    catch (InvalidOperationException) // String passed is not Xml, return null
-                    {
-                        return null;
-                    }
-
+                        return serialiser.Deserialize(xmlReader) as T;
                 }
             }
 
-            return newObject;
         }
         #endregion
 
