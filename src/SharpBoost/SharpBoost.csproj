@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="EqualityComparer.cs" />
     <Compile Include="FunProg\FunctionsExtensions.cs" />
     <Compile Include="Arguments.cs" />
     <Compile Include="FunProg\Lambda.cs" />
