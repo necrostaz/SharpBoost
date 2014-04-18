@@ -46,8 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComparerFactory.cs" />
     <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="EqualityComparer.cs" />
     <Compile Include="FunProg\FunctionsExtensions.cs" />
     <Compile Include="Arguments.cs" />
     <Compile Include="FunProg\Lambda.cs" />
