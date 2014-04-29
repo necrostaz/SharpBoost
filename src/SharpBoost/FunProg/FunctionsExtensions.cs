@@ -2,6 +2,7 @@
 using System.Threading;
 
 namespace SharpBoost.FunProg {
+    // ReSharper disable InconsistentNaming
     public static class FunctionsExtensions {
         #region Action to Func conversion
 
@@ -22,6 +23,27 @@ namespace SharpBoost.FunProg {
         public static Func<T, T1, Unit> ToFunc<T, T1>(this Action<T, T1> action) {
             return (t, t1) => {
                 action(t, t1);
+                return new Unit();
+            };
+        }
+
+        public static Func<T, T1, T2, Unit> ToFunc<T, T1, T2>(this Action<T, T1, T2> action) {
+            return (t, t1, t2) => {
+                action(t, t1, t2);
+                return new Unit();
+            };
+        }
+
+        public static Func<T, T1, T2, T3, Unit> ToFunc<T, T1, T2, T3>(this Action<T, T1, T2, T3> action) {
+            return (t, t1, t2, t3) => {
+                action(t, t1, t2, t3);
+                return new Unit();
+            };
+        }
+
+        public static Func<T, T1, T2, T3, T4, Unit> ToFunc<T, T1, T2, T3, T4>(this Action<T, T1, T2, T3, T4> action) {
+            return (t, t1, t2, t3, t4) => {
+                action(t, t1, t2, t3, t4);
                 return new Unit();
             };
         }
@@ -116,6 +138,83 @@ namespace SharpBoost.FunProg {
                     if (catchBlock != null)
                         catchBlock(ex, item);
                 }
+            };
+        }
+
+        #endregion
+
+        #region Control flow
+
+        public static Action AddAfter(this Action action, Action next) {
+            next.ArgumentNullCheck("next");
+
+            return () => {
+                action();
+                next();
+            };
+        }
+
+        public static Action<T> AddAfter<T>(this Action<T> action, Action<T> next) {
+            next.ArgumentNullCheck("next");
+
+            return t => {
+                action(t);
+                next(t);
+            };
+        }
+
+
+        public static Action<T, U> AddAfter<T, U>(this Action<T> action, Action<U> next) {
+            next.ArgumentNullCheck("next");
+
+            return (t, u) => {
+                action(t);
+                next(u);
+            };
+        }
+
+        public static Action<T, T2> AddAfter<T, T2>(this Action<T, T2> action, Action<T, T2> next) {
+            next.ArgumentNullCheck("next");
+
+            return (t, t2) => {
+                action(t, t2);
+                next(t, t2);
+            };
+        }
+
+        public static Action AddBefore(this Action action, Action before) {
+            before.ArgumentNullCheck("before");
+
+            return () => {
+                before();
+                action();
+            };
+        }
+
+        public static Action<T> AddBefore<T>(this Action<T> action, Action<T> before) {
+            before.ArgumentNullCheck("before");
+
+            return t => {
+                before(t);
+                action(t);
+            };
+        }
+
+        public static Action<T, U> AddBefore<T, U>(this Action<T> action, Action<U> before) {
+            before.ArgumentNullCheck("before");
+
+            return (t, u) => {
+                before(u);
+                action(t);
+            };
+        }
+
+        public static Action<T, T2> AddBefore<T, T2>(this Action<T, T2> action, Action<T, T2> before) {
+            before.ArgumentNullCheck("before");
+
+            return (t, t2) => {
+                before(t, t2);
+                action(t, t2);
             };
         }
 

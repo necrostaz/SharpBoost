@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Xml;
+using SharpBoost.IO;
 
 namespace SharpBoost {
     public static class StreamExtensions {
@@ -29,13 +30,10 @@ namespace SharpBoost {
             while (count > 0);
         }
 
-        public static string ToTempFile(this Stream stream) {
-            stream.ArgumentNullCheck("stream");
-
-            var tmpFileName = Path.GetTempFileName();
-            ToFile(stream, tmpFileName);
-
-            return tmpFileName;
+        public static TempFile ToTempFile(this Stream stream) {
+            var res = new TempFile();
+            res.ProcessPath(path => stream.ArgumentNullCheck("stream").ToFile(path));
+            return res;
         }
 
         public static void ToFile(this Stream stream, string path) {

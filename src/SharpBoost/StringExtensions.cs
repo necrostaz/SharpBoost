@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml;
 using System.Xml.Serialization;
+using SharpBoost.IO;
 
 namespace SharpBoost {
     public static class StringExtensions {
@@ -236,6 +237,47 @@ namespace SharpBoost {
             }
 
         }
+        #endregion
+
+        #region IO Utils
+
+        public static byte[] ToBytes(this string source, Encoding encoding) {
+            return encoding.ArgumentNullCheck("encoding")
+                .GetBytes(source.ArgumentNullCheck("source"));
+        }
+
+        public static byte[] ToBytes(this string source) {
+            return ToBytes(source, Encoding.UTF8);
+        }
+
+        public static Stream ToStream(this string source, Encoding encoding) {
+            return ToBytes(source, encoding).ToStream();
+        }
+
+        public static Stream ToStream(this string source) {
+            return ToStream(source, Encoding.UTF8);
+        }
+
+        public static void ToFile(this string source, string path, Encoding encoding) {
+            File.WriteAllText(path.StringArgumentCheck("path"),
+                source.ArgumentNullCheck("source"), 
+                encoding.ArgumentNullCheck("encoding"));
+        }
+
+        public static void ToFile(this string source, string path) {
+            ToFile(source, path, Encoding.UTF8);
+        }
+
+        public static TempFile ToTempFile(this string source, Encoding encoding) {
+            var res = new TempFile();
+            res.ProcessPath(path => source.ToFile(path, encoding));
+            return res;
+        }
+
+        public static TempFile ToTempFile(this string source) {
+            return ToTempFile(source, Encoding.UTF8);
+        }
+
         #endregion
 
         //TODO: convert to X extensions

@@ -46,7 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayExtensions.cs" />
     <Compile Include="ComparerFactory.cs" />
+    <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="FunProg\FunctionsExtensions.cs" />
     <Compile Include="Arguments.cs" />
@@ -54,6 +56,7 @@
     <Compile Include="FunProg\PatternMatch.cs" />
     <Compile Include="FunProg\Set.cs" />
     <Compile Include="FunProg\Unit.cs" />
+    <Compile Include="IO\TempFile.cs" />
     <Compile Include="MonadicNullCheckChains.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamExtensions.cs" />

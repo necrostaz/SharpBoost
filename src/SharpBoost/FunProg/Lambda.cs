@@ -14,6 +14,18 @@ namespace SharpBoost.FunProg {
             return a.ToFunc();
         }
 
+        public static Func<T, T1, T2, Unit> A<T, T1, T2>(Action<T, T1, T2> a) {
+            return a.ToFunc();
+        }
+
+        public static Func<T, T1, T2, T3, Unit> A<T, T1, T2, T3>(Action<T, T1, T2, T3> a) {
+            return a.ToFunc();
+        }
+
+        public static Func<T, T1, T2, T3, T4, Unit> A<T, T1, T2, T3, T4>(Action<T, T1, T2, T3, T4> a) {
+            return a.ToFunc();
+        }
+
         public static Func<T> F<T>(Func<T> f) {
             return f;
         }
