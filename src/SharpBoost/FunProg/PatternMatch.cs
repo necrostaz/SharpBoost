@@ -4,7 +4,7 @@ using System.Linq;
 
 
 namespace SharpBoost.FunProg {
-    public class PatternMatch<T, TResult> {
+    public class PatternMatch<T, TResult> : IEnumerable<Tuple<Func<T, bool>, Func<T, TResult>>> {
         private readonly T _value;
 
         private readonly List<Tuple<Func<T, bool>, Func<T, TResult>>> _cases
@@ -12,8 +12,31 @@ namespace SharpBoost.FunProg {
 
         private Func<T, TResult> _defaultFunc;
 
+        public PatternMatch() {}
+
         internal PatternMatch(T value) {
             _value = value;
+        }
+
+        public void Add(Func<T, bool> predicate, Func<T, TResult> func) {
+            _cases.Add(
+            Tuple.Create(
+                predicate.ArgumentNullCheck("predicate"),
+                func.ArgumentNullCheck("func")));
+
+
+        }
+
+        public void Add(T value, Func<T, TResult> func) {
+            Add(Lambda.F<T, bool>(x => x.Equals(value)), func);
+        }
+
+        public void Add(Func<T, TResult> defaultFunc) {
+            Add(x => true, defaultFunc);
+        }
+
+        public void Add(TResult defaultResult) {
+            Add(_ => defaultResult);
         }
 
         public Func<Func<T, TResult>, PatternMatch<T, TResult>> Case(Func<T, bool> condition) {
@@ -38,19 +61,47 @@ namespace SharpBoost.FunProg {
             return this;
         }
 
+        public PatternMatch<T, TResult> Default(TResult defaultResult) {
+            return Default(_ => defaultResult);
+        }
+
         public TResult ProcessMatch() {
             if (_defaultFunc != null)
                 _cases.Add(Tuple.Create(Lambda.F<T, bool>(x => true), _defaultFunc));
 
-            foreach (var c in _cases.Where(c => c.Item1(_value))) { return c.Item2(_value); }
+            var success = _cases.FirstOrDefault(c => c.Item1(_value));
+            if (success != null)
+                return success.Item2(_value);
 
             throw new MatchNotFoundException("No one of cases was matched");
         }
+
+        #region IEnumerable<Tuple<Func<T,bool>,Func<T,TResult>>> Members
+
+        public IEnumerator<Tuple<Func<T, bool>, Func<T, TResult>>> GetEnumerator() {
+            return _cases.GetEnumerator();
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
+            return _cases.GetEnumerator();
+        }
+
+        #endregion
+
+        
     }
 
     public static class PatternMatchExtensions {
         public static PatternMatch<T, TResult> MatchOf<T, TResult>(this T value) {
             return new PatternMatch<T, TResult>(value);
+        }
+
+        public static TResult MatchOf<T, TResult>(this T value, PatternMatch<T, TResult> matcher) {
+            return matcher.ArgumentNullCheck("matcher").ProcessMatch();
         }
     }
 
