@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBoost", "SharpBoost\SharpBoost.csproj", "{F08D46AD-9D92-473B-95A8-479E609FCF3B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBoost.Tests", "SharpBoost.Tests\SharpBoost.Tests.csproj", "{CFCB245A-6A70-4E1B-8334-BD3BF04CCBCF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{F08D46AD-9D92-473B-95A8-479E609FCF3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F08D46AD-9D92-473B-95A8-479E609FCF3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F08D46AD-9D92-473B-95A8-479E609FCF3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFCB245A-6A70-4E1B-8334-BD3BF04CCBCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFCB245A-6A70-4E1B-8334-BD3BF04CCBCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFCB245A-6A70-4E1B-8334-BD3BF04CCBCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFCB245A-6A70-4E1B-8334-BD3BF04CCBCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,38 +5,41 @@ using System.Linq;
 
 namespace SharpBoost.FunProg {
     public class PatternMatch<T, TResult> : IEnumerable<Tuple<Func<T, bool>, Func<T, TResult>>> {
-        private readonly T _value;
+        private T _value;
 
         private readonly List<Tuple<Func<T, bool>, Func<T, TResult>>> _cases
             = new List<Tuple<Func<T, bool>, Func<T, TResult>>>();
 
         private Func<T, TResult> _defaultFunc;
 
-        public PatternMatch() {}
+        public PatternMatch() { }
+
+        internal void SetValue(T value) {
+            _value = value;
+        }
 
         internal PatternMatch(T value) {
             _value = value;
         }
 
         public void Add(Func<T, bool> predicate, Func<T, TResult> func) {
-            _cases.Add(
-            Tuple.Create(
-                predicate.ArgumentNullCheck("predicate"),
-                func.ArgumentNullCheck("func")));
-
-
+            Case(predicate)(func);
         }
 
         public void Add(T value, Func<T, TResult> func) {
-            Add(Lambda.F<T, bool>(x => x.Equals(value)), func);
+            Case(value)(func);
+        }
+
+        public void Add(T value, TResult result) {
+            Case(value, result);
         }
 
         public void Add(Func<T, TResult> defaultFunc) {
-            Add(x => true, defaultFunc);
+            Default(defaultFunc);
         }
 
         public void Add(TResult defaultResult) {
-            Add(_ => defaultResult);
+            Default(defaultResult);
         }
 
         public Func<Func<T, TResult>, PatternMatch<T, TResult>> Case(Func<T, bool> condition) {
@@ -47,10 +50,11 @@ namespace SharpBoost.FunProg {
         }
 
         public Func<Func<T, TResult>, PatternMatch<T, TResult>> Case(T value) {
-            return f => {
-                _cases.Add(Tuple.Create(Lambda.F<T, bool>(x => x.Equals(value)), f.ArgumentNullCheck("retFunc")));
-                return this;
-            };
+            return Case(Lambda.F<T, bool>(x => x == null ? value == null : x.Equals(value)));
+        }
+
+        public PatternMatch<T, TResult> Case(T value, TResult result) {
+            return Case(value)(_ => result);
         }
 
         public PatternMatch<T, TResult> Default(Func<T, TResult> defaultFunc) {
@@ -92,7 +96,7 @@ namespace SharpBoost.FunProg {
 
         #endregion
 
-        
+
     }
 
     public static class PatternMatchExtensions {
@@ -101,7 +105,7 @@ namespace SharpBoost.FunProg {
         }
 
         public static TResult MatchOf<T, TResult>(this T value, PatternMatch<T, TResult> matcher) {
-            return matcher.ArgumentNullCheck("matcher").ProcessMatch();
+            return matcher.ArgumentNullCheck("matcher").Do(x => x.SetValue(value)).ProcessMatch();
         }
     }
 
