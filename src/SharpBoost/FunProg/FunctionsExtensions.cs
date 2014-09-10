@@ -41,12 +41,14 @@ namespace SharpBoost.FunProg {
             };
         }
 
+#if NET4
         public static Func<T, T1, T2, T3, T4, Unit> ToFunc<T, T1, T2, T3, T4>(this Action<T, T1, T2, T3, T4> action) {
             return (t, t1, t2, t3, t4) => {
                 action(t, t1, t2, t3, t4);
                 return new Unit();
             };
         }
+#endif
 
         public static Func<T, TResult> ToFunc<T, TResult>(this Action<T> action, TResult value) {
             return t => {
