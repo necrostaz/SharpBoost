@@ -81,6 +81,7 @@
     <Compile Include="FunProg\Unit.cs" />
     <Compile Include="IO\TempFile.cs" />
     <Compile Include="MonadicNullCheckChains.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
